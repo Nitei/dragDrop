@@ -1,3 +1,19 @@
-<p>
-  drag-drop works!
-</p>
+<!-- <pre>{{arrayForms | json}}</pre> -->
+
+<input type="text"
+  [(ngModel)]="newForm.nombre"
+  (keydown.enter)="nuevoFormulario()">
+<hr>
+
+{{newForm.nombre}}
+
+<hr>
+<div cdkDropList
+  class="list"
+  (cdkDropListDropped)="drop($event)">
+  <div class="box"
+    *ngFor="let form of arrayForms"
+    cdkDrag>Id: {{form.id}} - Idx: {{form.idx}} - Nombre: {{form.nombre}}
+    <hr>
+  </div>
+</div>
