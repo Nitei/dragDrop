@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsBackService } from '../forms-back.service/forms-back.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragSortEvent } from '@angular/cdk/drag-drop';
+import { Formulario } from './formulario.interface';
 
 @Component( {
   selector: 'app-drag-drop',
@@ -9,12 +10,12 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   changeDetection: ChangeDetectionStrategy.OnPush
 } )
 export class DragDropComponent implements OnInit {
-  arrayForms: object[] = [];
-  originalArr;
-  private newForm = {
+  private arrayForms: Formulario[];
+  private newForm: Formulario = {
     id: 0,
     idx: 0,
-    nombre: ''
+    nombre: '',
+    color: '',
   };
 
   constructor(
@@ -25,29 +26,48 @@ export class DragDropComponent implements OnInit {
     this.initFillArrayForms();
   }
 
+  drop( event: CdkDragSortEvent<Formulario> ) {
+    const { previousIndex, currentIndex } = event;
+    const idxPrevElement: number = this.arrayForms[ previousIndex ].idx;
+    const idxCurrElement: number = this.arrayForms[ currentIndex ].idx;
 
+    // Guardamos el index del elemento arrastrado para evitar que al intercambiar los index se guarden mal, sucede así:
+    /*    Arrastramos patata ha melon idx:0 a idx:2
+                                          ┌────────────────── Intercambio (automatico) ───────────┐
+                                          │ 1º patata a melon  -  2º melon a patata (automatico)  │
+    Index en array  -  idx -  nombre    - │ 1º paso de idx     -  2º paso de idx (automatico)     │ - Resultado (no deseado)
+          0             0     patata  o┐          0   o┐                 0 <┐                               0
+          1             1     piña     │          1    │                 1  │                               1
+          2             2     melon   <┘          0   <┘                 0 o┘                               0
 
-  drop( event: CdkDragDrop<any> ) {
+    Para evitar que se sobreescriban los indices deben ser guardados en variables para ser tomados como referencia.
+    */
 
-    const arrAnterior: any = this.arrayForms[ event.previousIndex ];
-    const arrActual: any = this.arrayForms[ event.currentIndex ];
-    const idxAnterior: any = this.arrayForms[ event.previousIndex ].idx;
-    const idxActual: any = this.arrayForms[ event.currentIndex ].idx;
+    this.arrayForms[ previousIndex ].idx = idxCurrElement;
+    this.arrayForms[ currentIndex ].idx = idxPrevElement;
+    this.arrayForms.sort( ( a: Formulario, b: Formulario ) => a.idx - b.idx );
 
-    arrAnterior.idx = idxActual;
-    arrActual.idx = idxAnterior;
-    this.arrayForms.sort( ( a: any, b: any ) => a.idx - b.idx );
+    /*
+    Así es como se haría en javascript pero para evitar peticiones pesadas quizas sería mejor que esta lógica
+    estuviese en el back de forma que solo habria que pasar el event.previousIndex y event.currentIndex
+    el back asignaría los nuevos index, nos devolvería la lista de formularios y el front la ordenaría por la propiedad
+    idx.
 
-    // this.arrayForms = this.formsBackService.Indizador( this.arrayForms )
+    Así se enviaría una sola petición al back por cada cambio efectivo con un peso mínimo.
+    */
+
+    const formsIDandIDXsortedByID = this.arrayForms.map( a => ( { id: a.id, idx: a.idx } ) ).sort( ( a, b ) => a.id - b.id );
+    console.log( formsIDandIDXsortedByID );
+
+    this.formsBackService.sendToServer( formsIDandIDXsortedByID );
   }
   private nuevoFormulario() {
     this.newForm.id = this.arrayForms.length + 1;
     this.arrayForms.push( { ...this.newForm } )
-    this.formsBackService.Indizador( this.arrayForms )
   }
   private fillArrayForms() {
     this.arrayForms = this.formsBackService.jaBackForms;
-    this.originalArr = this.arrayForms.map( e => e );
+    this.arrayForms.sort( ( a: Formulario, b: Formulario ) => a.idx - b.idx );
   }
   public initFillArrayForms() {
     this.fillArrayForms();

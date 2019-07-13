@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Formulario } from '../drag-drop/formulario.interface';
 
 @Injectable( {
   providedIn: 'root'
 } )
 export class FormsBackService {
 
-  public jaBackForms: object[] = [
+  public jaBackForms: Formulario[] = [
     {
       id: 1,
       idx: 0,
@@ -81,15 +82,7 @@ export class FormsBackService {
   ];
 
   constructor() {
-    this.Indizador( this.jaBackForms )
   }
 
-  public Indizador( arrayForms: any[] ) {
-    for ( let index = 0; index < arrayForms.length; index++ ) {
-      arrayForms[ index ].idx = index;
-    }
-    console.log( 'servicio', arrayForms );
-    this.jaBackForms = arrayForms;
-    return this.jaBackForms;
-  }
+  public sendToServer( algo: object[] | Formulario | Formulario[] ) { }
 }

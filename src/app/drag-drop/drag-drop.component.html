@@ -1,11 +1,12 @@
-<!-- <pre>{{arrayForms | json}}</pre> -->
-
 <input type="text"
   [(ngModel)]="newForm.nombre"
-  (keydown.enter)="nuevoFormulario()">
+  (keydown.enter)="nuevoFormulario()"
+  placeholder="Nombre del nuevo formulario">
 <hr>
 
-{{newForm.nombre}}
+<div>
+  {{newForm.nombre}}
+</div>
 
 <hr>
 <div cdkDropList
@@ -16,38 +17,6 @@
     [style.background]="form.color"
     cdkDrag>
     Index: {{idx}} - Id: {{form.id}} - Idx: {{form.idx}} - Nombre: {{form.nombre}}
-    <hr>
-  </div>
-</div>
-
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-
-<div cdkDropList
-  class="list"
-  (cdkDropListDropped)="drop($event)">
-  <div class="box"
-    *ngFor="let forma of originalArr; let idx = index"
-    [style.background]="forma.color"
-    cdkDrag>
-    Index: {{idx}} - Id: {{forma.id}} - Idx: {{forma.idx}} - Nombre: {{forma.nombre}}
     <hr>
   </div>
 </div>
