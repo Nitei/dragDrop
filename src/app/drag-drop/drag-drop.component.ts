@@ -26,16 +26,19 @@ export class DragDropComponent implements OnInit {
     this.initFillArrayForms();
   }
 
-  drop( event: CdkDragSortEvent<Formulario> ) {
-    const { previousIndex, currentIndex } = event;
-    const idxPrevElement: number = this.arrayForms[ previousIndex ].idx;
-    const idxCurrElement: number = this.arrayForms[ currentIndex ].idx;
+  private drop( event: CdkDragSortEvent<Formulario> ) {
+    const {
+      previousIndex: idxElementoOrigen,
+      currentIndex: idxElementoDestino
+    } = event;
+    const idxElementoArrastrado: number = this.arrayForms[ idxElementoOrigen ].idx;
+    const idxElementoSoltado: number = this.arrayForms[ idxElementoDestino ].idx;
 
     // Guardamos el index del elemento arrastrado para evitar que al intercambiar los index se guarden mal, sucede así:
     /*    Arrastramos patata ha melon idx:0 a idx:2
-                                          ┌────────────────── Intercambio (automatico) ───────────┐
-                                          │ 1º patata a melon  -  2º melon a patata (automatico)  │
-    Index en array  -  idx -  nombre    - │ 1º paso de idx     -  2º paso de idx (automatico)     │ - Resultado (no deseado)
+                                           ┌────────────────── Intercambio (automatico) ───────────┐
+                      ┌─  propiedades ─┐   │ 1º patata a melon  -  2º melon a patata (automatico)  │
+    Posición en array  - │ idx -  nombre  │ - │ 1º paso de idx     -  2º paso de idx (automatico)     │ - Resultado (no deseado)
           0             0     patata  o┐          0   o┐                 0 <┐                               0
           1             1     piña     │          1    │                 1  │                               1
           2             2     melon   <┘          0   <┘                 0 o┘                               0
@@ -43,8 +46,8 @@ export class DragDropComponent implements OnInit {
     Para evitar que se sobreescriban los indices deben ser guardados en variables para ser tomados como referencia.
     */
 
-    this.arrayForms[ previousIndex ].idx = idxCurrElement;
-    this.arrayForms[ currentIndex ].idx = idxPrevElement;
+    this.arrayForms[ idxElementoOrigen ].idx = idxElementoSoltado;
+    this.arrayForms[ idxElementoDestino ].idx = idxElementoArrastrado;
     this.arrayForms.sort( ( a: Formulario, b: Formulario ) => a.idx - b.idx );
 
     /*
@@ -56,7 +59,11 @@ export class DragDropComponent implements OnInit {
     Así se enviaría una sola petición al back por cada cambio efectivo con un peso mínimo.
     */
 
-    const formsIDandIDXsortedByID = this.arrayForms.map( a => ( { id: a.id, idx: a.idx } ) ).sort( ( a, b ) => a.id - b.id );
+    const formsIDandIDXsortedByID =
+      this.arrayForms
+        .map( a => ( { id: a.id, idx: a.idx } ) )
+        .sort( ( a, b ) => a.id - b.id );
+
     console.log( formsIDandIDXsortedByID );
 
     this.formsBackService.sendToServer( formsIDandIDXsortedByID );
