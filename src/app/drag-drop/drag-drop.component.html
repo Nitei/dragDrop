@@ -12,8 +12,10 @@
   class="list"
   (cdkDropListDropped)="drop($event)">
   <div class="box"
-    *ngFor="let form of arrayForms"
-    cdkDrag>Id: {{form.id}} - Idx: {{form.idx}} - Nombre: {{form.nombre}}
+    *ngFor="let form of arrayForms; let idx = index"
+    [style.background]="form.color"
+    cdkDrag>
+    Index: {{idx}} - Id: {{form.id}} - Idx: {{form.idx}} - Nombre: {{form.nombre}}
     <hr>
   </div>
 </div>
