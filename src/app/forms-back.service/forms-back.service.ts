@@ -30,46 +30,54 @@ export class FormsBackService {
       nombre: 'Melón',
       color: 'lightGreen'
     },
-    // {
-    //   id: 5,
-    //   idx: 4,
-    //   nombre: 'Sandía'
-    // },
-    // {
-    //   id: 6,
-    //   idx: 5,
-    //   nombre: 'Guisante'
-    // },
-    // {
-    //   id: 7,
-    //   idx: 6,
-    //   nombre: 'Pimiento'
-    // },
-    // {
-    //   id: 8,
-    //   idx: 7,
-    //   nombre: 'Kiwi'
-    // },
-    // {
-    //   id: 9,
-    //   idx: 8,
-    //   nombre: 'Platano'
-    // },
-    // {
-    //   id: 10,
-    //   idx: 9,
-    //   nombre: 'Pera'
-    // },
-    // {
-    //   id: 11,
-    //   idx: 10,
-    //   nombre: 'Manzana'
-    // },
-    // {
-    //   id: 12,
-    //   idx: 11,
-    //   nombre: 'Paraguaya'
-    // },
+    {
+      id: 5,
+      idx: 4,
+      nombre: 'Sandía',
+      color: 'Bisque'
+    },
+    {
+      id: 6,
+      idx: 5,
+      nombre: 'Guisante',
+      color: 'GreenYellow'
+    },
+    {
+      id: 7,
+      idx: 6,
+      nombre: 'Pimiento',
+      color: 'Khaki'
+    },
+    {
+      id: 8,
+      idx: 7,
+      nombre: 'Kiwi',
+      color: 'LawnGreen'
+    },
+    {
+      id: 9,
+      idx: 8,
+      nombre: 'Platano',
+      color: 'SandyBrown'
+    },
+    {
+      id: 10,
+      idx: 9,
+      nombre: 'Pera',
+      color: 'Lime'
+    },
+    {
+      id: 11,
+      idx: 10,
+      nombre: 'Manzana',
+      color: 'OrangeRed'
+    },
+    {
+      id: 12,
+      idx: 11,
+      nombre: 'Paraguaya',
+      color: 'Violet'
+    },
   ];
 
   constructor() {

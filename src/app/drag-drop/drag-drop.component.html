@@ -19,3 +19,35 @@
     <hr>
   </div>
 </div>
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+<div cdkDropList
+  class="list"
+  (cdkDropListDropped)="drop($event)">
+  <div class="box"
+    *ngFor="let forma of originalArr; let idx = index"
+    [style.background]="forma.color"
+    cdkDrag>
+    Index: {{idx}} - Id: {{forma.id}} - Idx: {{forma.idx}} - Nombre: {{forma.nombre}}
+    <hr>
+  </div>
+</div>

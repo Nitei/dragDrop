@@ -9,11 +9,12 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   changeDetection: ChangeDetectionStrategy.OnPush
 } )
 export class DragDropComponent implements OnInit {
-  private arrayForms: object[] = [];
+  arrayForms: object[] = [];
+  originalArr;
   private newForm = {
     id: 0,
     idx: 0,
-    first: ''
+    nombre: ''
   };
 
   constructor(
@@ -23,9 +24,21 @@ export class DragDropComponent implements OnInit {
   ngOnInit() {
     this.initFillArrayForms();
   }
+
+
+
   drop( event: CdkDragDrop<any> ) {
-    moveItemInArray( this.arrayForms, event.previousIndex, event.currentIndex );
-    this.arrayForms = this.formsBackService.Indizador( this.arrayForms )
+
+    const arrAnterior: any = this.arrayForms[ event.previousIndex ];
+    const arrActual: any = this.arrayForms[ event.currentIndex ];
+    const idxAnterior: any = this.arrayForms[ event.previousIndex ].idx;
+    const idxActual: any = this.arrayForms[ event.currentIndex ].idx;
+
+    arrAnterior.idx = idxActual;
+    arrActual.idx = idxAnterior;
+    this.arrayForms.sort( ( a: any, b: any ) => a.idx - b.idx );
+
+    // this.arrayForms = this.formsBackService.Indizador( this.arrayForms )
   }
   private nuevoFormulario() {
     this.newForm.id = this.arrayForms.length + 1;
@@ -34,6 +47,7 @@ export class DragDropComponent implements OnInit {
   }
   private fillArrayForms() {
     this.arrayForms = this.formsBackService.jaBackForms;
+    this.originalArr = this.arrayForms.map( e => e );
   }
   public initFillArrayForms() {
     this.fillArrayForms();
